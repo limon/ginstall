@@ -116,6 +116,11 @@ tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
 popd
 
 #cp make.conf $MOUNT_POINT /etc/portage/make.conf
+cat <<EOF >> $MOUNT_POINT/etc/portage/make.conf
+GENTOO_MIRRORS="https://mirrors.bfsu.edu.cn/gentoo"
+ACCEPT_KEYWORDS="~amd64"
+EOF
+
 mkdir -p $MOUNT_POINT/etc/portage/repos.conf
 cp $MOUNT_POINT/usr/share/portage/config/repos.conf $MOUNT_POINT/etc/portage/repos.conf/gentoo.conf
 sed -i -e 's/sync-rsync-verify-metamanifest = yes/sync-rsync-verify-metamanifest = no/' -e 's/sync-uri.*/sync-uri = rsync:\/\/mirrors.bfsu.edu.cn\/gentoo-portage\//' $MOUNT_POINT/etc/portage/repos.conf/gentoo.conf

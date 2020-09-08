@@ -1,9 +1,5 @@
 #!/bin/bash
 source /etc/profile
-cat <<EOF >> /etc/portage/make.conf
-GENTOO_MIRRORS="https://mirrors.bfsu.edu.cn/gentoo"
-ACCEPT_KEYWORDS="~amd64"
-EOF
 
 emerge-webrsync
 emerge --sync
