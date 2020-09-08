@@ -4,8 +4,6 @@ Minimal Gentoo installation based on systemd profile
 
 Use btrfs subvolumes
 
-Use sys-kernel/gentoo-kernel-bin for versatility
-
 ## Usage
 1. Partition first
 2. Set destination partitions and portage mirror in start.sh then execute it

@@ -132,6 +132,7 @@ mount --make-rslave /mnt/gentoo/sys
 mount --rbind /dev /mnt/gentoo/dev
 mount --make-rslave /mnt/gentoo/dev
 
+cp ${BASH_SOURCE%/*}/config.nv $MOUNT_POINT/config
 cp ${BASH_SOURCE%/*}/setup.sh $MOUNT_POINT
 chmod +x $MOUNT_POINT/setup.sh
 cp /tmp/fstab $MOUNT_POINT/etc/fstab
