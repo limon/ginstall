@@ -119,6 +119,7 @@ popd
 cat <<EOF >> $MOUNT_POINT/etc/portage/make.conf
 GENTOO_MIRRORS="https://mirrors.bfsu.edu.cn/gentoo"
 ACCEPT_KEYWORDS="~amd64"
+ACCEPT_LICENSE="*"
 EOF
 
 mkdir -p $MOUNT_POINT/etc/portage/repos.conf

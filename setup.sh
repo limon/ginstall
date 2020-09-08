@@ -21,14 +21,15 @@ EOF
 
 env-update
 
-#emerge sys-kernel/gentoo-kernel-bin grub zstd
-emerge gentoo-sources grub zstd linux-firmware
+emerge sys-kernel/gentoo-kernel-bin grub zstd linux-firmware
+#emerge gentoo-sources grub zstd linux-firmware
 
-pushd /usr/src/linux
-cp /config.nv .config
-make -j16
-make modules_install
-make install
+#pushd /usr/src/linux
+#cp /config .config
+#make -j16
+#make modules_install
+#make install
+#popd
 
 grub-install
 grub-mkconfig -o /boot/grub/grub.cfg
