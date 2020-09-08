@@ -33,6 +33,8 @@ make install
 grub-install
 grub-mkconfig -o /boot/grub/grub.cfg
 
+cp /make.conf /etc/portage/make.conf
+
 echo "Set root password"
 passwd
 
