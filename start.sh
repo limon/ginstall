@@ -114,7 +114,7 @@ mount $EFI_PART $MOUNT_POINT/boot/efi
 #swapon $SWAP_PART 2> /dev/null
 
 pushd $MOUNT_POINT
-wget $STAGE3_TARBALL
+curl -O $STAGE3_TARBALL
 tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
 popd
 
