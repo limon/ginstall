@@ -1,11 +1,14 @@
 #!/bin/bash
 MOUNT_POINT=/mnt/gentoo
-EFI_PART=/dev/sda1
-SWAP_PART=/dev/sda2
-BTRFS_PART=/dev/sda3
+DISK=/dev/sda
+EFI_PART="${DISK}1"
+SWAP_PART="${DISK}2"
+BTRFS_PART="${DISK}3"
 BTRFS_ROOT_SUBVOL=gentoo
 SUBVOLS="home opt srv var"
-STAGE3_TARBALL="https://mirrors.bfsu.edu.cn/gentoo/releases/amd64/autobuilds/current-stage3-amd64-systemd/stage3-amd64-systemd-20200906T214503Z.tar.xz"
+SYNC_URI="rsync://mirrors.bfsu.edu.cn/gentoo-portage"
+MIRROR_SERVER="https://mirrors.bfsu.edu.cn/gentoo"
+STAGE3_TARBALL="$MIRROR_SERVER/releases/amd64/autobuilds/$(curl -s $MIRROR_SERVER/releases/amd64/autobuilds/latest-stage3-amd64-systemd.txt | tail -n 1 | cut -f 1 -d ' ')"
 
 function yes_or_terminate {
 	printf "$1?(y\N): "
@@ -115,16 +118,11 @@ wget $STAGE3_TARBALL
 tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
 popd
 
-#cp make.conf $MOUNT_POINT /etc/portage/make.conf
-cat <<EOF >> $MOUNT_POINT/etc/portage/make.conf
-GENTOO_MIRRORS="https://mirrors.bfsu.edu.cn/gentoo"
-ACCEPT_KEYWORDS="~amd64"
-ACCEPT_LICENSE="*"
-EOF
+cp make.conf $MOUNT_POINT /etc/portage/make.conf
 
 mkdir -p $MOUNT_POINT/etc/portage/repos.conf
 cp $MOUNT_POINT/usr/share/portage/config/repos.conf $MOUNT_POINT/etc/portage/repos.conf/gentoo.conf
-sed -i -e 's/sync-rsync-verify-metamanifest = yes/sync-rsync-verify-metamanifest = no/' -e 's/sync-uri.*/sync-uri = rsync:\/\/mirrors.bfsu.edu.cn\/gentoo-portage\//' $MOUNT_POINT/etc/portage/repos.conf/gentoo.conf
+sed -i -e 's/sync-rsync-verify-metamanifest = yes/sync-rsync-verify-metamanifest = no/' -e "s|sync-uri.*|sync-uri = $SYNC_URI|" $MOUNT_POINT/etc/portage/repos.conf/gentoo.conf
 
 cp --dereference /etc/resolv.conf $MOUNT_POINT/etc/
 mount --types proc /proc /mnt/gentoo/proc
@@ -133,11 +131,13 @@ mount --make-rslave /mnt/gentoo/sys
 mount --rbind /dev /mnt/gentoo/dev
 mount --make-rslave /mnt/gentoo/dev
 
-cp ${BASH_SOURCE%/*}/config.nv $MOUNT_POINT/config
-cp ${BASH_SOURCE%/*}/make.conf $MOUNT_POINT
-cp ${BASH_SOURCE%/*}/setup.sh $MOUNT_POINT
+cp config.nv $MOUNT_POINT/config
+cp make.conf $MOUNT_POINT
+cp setup.sh $MOUNT_POINT
 chmod +x $MOUNT_POINT/setup.sh
 cp /tmp/fstab $MOUNT_POINT/etc/fstab
-cp ${BASH_SOURCE%/*}/config.sh $MOUNT_POINT/root
+cp config.sh $MOUNT_POINT/root
 
 chroot /mnt/gentoo /bin/bash /setup.sh
+
+echo "Install Complete"

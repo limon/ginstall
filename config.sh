@@ -6,7 +6,7 @@ cat <<EOF > /etc/systemd/network/$ifname.network
 Name=$ifname
 
 [Network]
-Address=192.168.1.181/24
+Address=192.168.1.180/24
 Gateway=192.168.1.100
 EOF
 

@@ -3,7 +3,6 @@ source /etc/profile
 
 emerge-webrsync
 emerge --sync
-eselect news read
 eselect profile set default/linux/amd64/17.1/systemd
 
 echo "Asia/Shanghai" > /etc/timezone
@@ -21,15 +20,15 @@ EOF
 
 env-update
 
-emerge sys-kernel/gentoo-kernel-bin grub zstd linux-firmware
-#emerge gentoo-sources grub zstd linux-firmware
+#emerge sys-kernel/gentoo-kernel-bin grub zstd linux-firmware
+emerge gentoo-sources grub zstd linux-firmware
 
-#pushd /usr/src/linux
-#cp /config .config
-#make -j16
-#make modules_install
-#make install
-#popd
+pushd /usr/src/linux
+cp /config .config
+make -j16
+make modules_install
+make install
+popd
 
 grub-install
 grub-mkconfig -o /boot/grub/grub.cfg
